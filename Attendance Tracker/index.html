@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Attendance Tracker</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      background: linear-gradient(to right, #ff6a00, #ee0979);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: border 0.3s;
+    }
+
+    input:focus {
+      border: 2px solid #2575fc;
+      outline: none;
+    }
+
+    button {
+      background: linear-gradient(to right, #ff416c, #ff4b2b);
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      font-size: 16px;
+      margin-top: 15px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(255, 64, 107, 0.5);
+    }
+
+    .card {
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 15px;
+      color: #333;
+      font-size: 18px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #ff4b2b;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎓 Attendance Tracker</h1>
+    <input type="number" id="total" placeholder="Enter Total Classes">
+    <input type="number" id="attended" placeholder="Enter Attended Classes">
+    <button onclick="calculateAttendance()">Check Attendance</button>
+
+    <div class="card" id="result" style="display: none;">
+      <p>Total Classes: <span id="totalOut"></span></p>
+      <p>Attended Classes: <span id="attendedOut"></span></p>
+      <p>Missed Classes: <span id="missedOut"></span></p>
+      <p>Attendance Percentage: <span class="highlight" id="percentageOut"></span>%</p>
+      <p id="neededClasses"></p>
+    </div>
+  </div>
+
+  <script>
+    function calculateAttendance() {
+      let total = parseInt(document.getElementById("total").value);
+      let attended = parseInt(document.getElementById("attended").value);
+      let resultCard = document.getElementById("result");
+
+      if (isNaN(total) || isNaN(attended) || total <= 0 || attended < 0 || attended > total) {
+        alert("⚠️ Please enter valid numbers.");
+        return;
+      }
+
+      let missed = total - attended;
+      let percentage = ((attended / total) * 100).toFixed(2);
+
+      document.getElementById("totalOut").innerText = total;
+      document.getElementById("attendedOut").innerText = attended;
+      document.getElementById("missedOut").innerText = missed;
+      document.getElementById("percentageOut").innerText = percentage;
+
+      // Calculate classes required for 85%
+      if (percentage < 85) {
+        let required = Math.ceil((0.85 * total - attended) / (1 - 0.85));
+        document.getElementById("neededClasses").innerText =
+          "📌 You need to attend at least " + required + " more classes to reach 85%.";
+      } else {
+        document.getElementById("neededClasses").innerText =
+          "✅ Great! You already have 85% or more attendance.";
+      }
+
+      resultCard.style.display = "block";
+    }
+  </script>
+</body>
+</html>
